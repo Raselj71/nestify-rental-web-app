@@ -14,16 +14,12 @@ datasource db {
 }
 
 model User{
-    id        String @id @default(auto()) @map("_id") @db.ObjectId
-    firsName String
-    lastName String
+    id       String @id @default(auto()) @map("_id") @db.ObjectId
+    name String
     password String
-    dob DateTime
-    address String
-    postCode Int
-    city String
-
-    userRole role @default(USER)
+    phone Int
+    property homeProperty[]
+    
 
      
 
@@ -31,10 +27,59 @@ model User{
 }
 
 enum role{
-  USER
-  ADMIN
+  TENANT
+  LANDLORD
 
 }
 
+model homeProperty{
+      id  String @id @default(auto()) @map("_id") @db.ObjectId
+      title String
+      images String[]
+      
+      address PropertyAddress[]
+      price Int
+      bed Int
+      bath Int
+      propertyArea Int
+      facing homeFacing @default(EAST_FACING)
+      summary String
+      booking bookingStatus @default(AVAILABLE)
+       
+      userId String @db.ObjectId
+      user User @relation(fields: [userId],references: [id],onDelete: Cascade)
+
+
+
+
+
+}
+
+enum bookingStatus{
+  BOOKED 
+  AVAILABLE
+
+}
+
+enum homeFacing{
+  EAST_FACING
+  WEST_FACING
+  SOUTH_FACING
+  NORTH_FACING
+}
+
+model PropertyAddress{
+  id  String @id @default(auto()) @map("_id") @db.ObjectId
+  division String
+  district String
+  area String
+  houseNo String
+  roadNo  String
+  contact String
+  propertyId String @db.ObjectId
+  property     homeProperty @relation(fields: [propertyId],references: [id],onDelete: Cascade)
+
+
+}
 
 
